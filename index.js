@@ -6,11 +6,15 @@ var https = require('https');
 var express = require('express');
 var app = express();
 
+var gm = require("./node/gmail.js");
+
 var httpServer = http.createServer(app);
 
 // TODO: Rerun watch()
 // https://developers.google.com/gmail/api/guides/push#protocol
-
+app.get("/login", async (req, res)=>{
+    gm.authorize(); 
+});
 app.post('/push', /*jsonBodyParser,*/ async (req, res) => {
     // Message comes in form in HTTP body:
     // https://developers.google.com/gmail/api/guides/push#protocol
@@ -89,7 +93,7 @@ app.post('/push', /*jsonBodyParser,*/ async (req, res) => {
 });
 
 
-httpServer.listen(8080);
+httpServer.listen(process.env.PORT);
 
 // TODO: get historyId from watch (https://developers.google.com/gmail/api/reference/rest/v1/users/watch)
 // Then use to do users.history

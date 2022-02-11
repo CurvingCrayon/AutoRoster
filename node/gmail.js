@@ -25,17 +25,17 @@ fs.readFile('credentials.json', (err, content) => {
  * @param {Object} credentials The authorization client credentials.
  * @param {function} callback The callback to call with the authorized client.
  */
-function authorize(credentials, callback) {
+export function authorize(credentials, callback) {
   const {client_secret, client_id, redirect_uris} = credentials.installed;
   const oAuth2Client = new google.auth.OAuth2(
       client_id, client_secret, redirect_uris[0]);
 
   // Check if we have previously stored a token.
   fs.readFile(TOKEN_PATH, (err, token) => {
-    //if (err) 
+    if (err) 
     return getNewToken(oAuth2Client, callback);
-    //oAuth2Client.setCredentials(JSON.parse(token));
-   // callback(oAuth2Client);
+    oAuth2Client.setCredentials(JSON.parse(token));
+    callback(oAuth2Client);
   });
 }
 
@@ -77,18 +77,20 @@ function getNewToken(oAuth2Client, callback) {
  */
 function listLabels(auth) {
   const gmail = google.gmail({version: 'v1', auth});
-  gmail.users.labels.list({
-    userId: 'me',
+  gmail.users.watch({
+    userId: "me",
+    topicName: "projects/autoroster/topics/topic1",
+    labelIds: ["INBOX"],
   }, (err, res) => {
-    if (err) return console.log('The API returned an error: ' + err);
-    const labels = res.data.labels;
-    if (labels.length) {
-      console.log('Labels:');
-      labels.forEach((label) => {
-        console.log(`- ${label.name}`);
-      });
-    } else {
-      console.log('No labels found.');
-    }
+    //console.log(res);
+    var historyId = res.data.historyId;
+    gmail.users.history.list({
+      userId: 'me',
+      startHistoryId: historyId
+    }, (err, res) => {
+      if (err) return console.log('The API returned an error: ' + err);
+      console.log(res);
+    });
   });
+  
 }

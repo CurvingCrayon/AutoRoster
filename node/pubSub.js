@@ -10,7 +10,7 @@ const {PubSub} = require('@google-cloud/pubsub');
 // Creates a client; cache this for further use
 const pubSubClient = new PubSub();
 
-export async function createTopic() {
+async function createTopic() {
   // Creates a new topic
   await pubSubClient.createTopic(topicName);
   console.log(`Topic ${topicName} created.`);
@@ -21,21 +21,15 @@ export async function createTopic() {
 /**
  * TODO(developer): Uncomment these variables before running the sample.
  */
-// const topicName = 'YOUR_TOPIC_NAME';
-// const subscriptionName = 'YOUR_SUBSCRIPTION_NAME';
+const topicName = 'topic1';
+const subscriptionName = 'asdf';
 
-// Imports the Google Cloud client library
-const {PubSub} = require('@google-cloud/pubsub');
-
-// Creates a client; cache this for further use
-const pubSubClient = new PubSub();
-
-export async function createPushSubscription() {
+async function createPushSubscription() {
   const options = {
     pushConfig: {
       // Set to an HTTPS endpoint of your choice. If necessary, register
       // (authorize) the domain on which the server is hosted.
-      pushEndpoint: `http://autoroster.herokuapp.com/push`,
+      pushEndpoint: `https://autoroster.herokuapp.com/push`,
     },
   };
 
