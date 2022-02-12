@@ -12,8 +12,9 @@ var httpServer = http.createServer(app);
 
 // TODO: Rerun watch()
 // https://developers.google.com/gmail/api/guides/push#protocol
-app.get("/login", async (req, res)=>{
-    gm.authorize(); 
+app.get("/login", (req, res)=>{
+    //gm.authorize(); 
+    res.status(200).send();
 });
 app.post('/push', /*jsonBodyParser,*/ async (req, res) => {
     // Message comes in form in HTTP body:
@@ -93,7 +94,9 @@ app.post('/push', /*jsonBodyParser,*/ async (req, res) => {
 });
 
 
-httpServer.listen(process.env.PORT);
+app.listen(process.env.PORT || 80, ()=>{
+    console.log("listening on " + String(process.env.PORT || 80))
+});
 
 // TODO: get historyId from watch (https://developers.google.com/gmail/api/reference/rest/v1/users/watch)
 // Then use to do users.history
