@@ -36,7 +36,7 @@ app.post('/push', /*jsonBodyParser,*/ async (req, res) => {
     //   }
     // }
     var body = req.body;
-    data = new Buffer(body.data, 'base64');
+    var data = new Buffer(body.data, 'base64');
     data = data.toString('ascii');
     // data will be in JSON string form {"emailAddress": "user@example.com", "historyId": "9876543210"}
     data = JSON.parse(data);
